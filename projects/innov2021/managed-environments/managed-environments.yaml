@@ -8,6 +8,7 @@ config:
 - szosty: szosty.json
 - trzeci: trzeci.json
 - testenvironment: testenvironment.json
+- newdemoenv: newdemoenv.json
 czwarty:
 - name: czwarty
 exampleenvironment:
@@ -26,3 +27,5 @@ trzeci:
 - name: trzeci
 testenvironment:
 - name: testenvironment
+newdemoenv:
+- name: newdemoenv
