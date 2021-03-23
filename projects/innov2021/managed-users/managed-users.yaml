@@ -2,9 +2,12 @@ config:
 - test1123123: test1123123.json
 - admin: admin.json
 - marek: marek.json
+- dummy: dummy.json
 admin:
 - name: admin
 test1123123:
 - name: test1123123
 marek:
 - name: marek
+dummy:
+- name: dummy
