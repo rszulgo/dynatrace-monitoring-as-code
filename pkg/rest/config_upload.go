@@ -78,8 +78,6 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 			path = fullUrl
 			tmp := strings.Replace(string(payload), "{", "{\n\"groupId\":\""+existingObjectId+"\",\n", 1)
 			body = []byte(tmp)
-		} else if configType == "managed-environments" {
-			path = joinUrl(fullUrl, existingObjectId)
 		}
 
 		// Updating a dashboard requires the ID to be contained in the JSON, so we just add it...
