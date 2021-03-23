@@ -47,18 +47,6 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 		existingObjectId = objectName
 	}
 
-	var retryPolicy = func(response Response) bool {
-		return false
-	}
-	var modifyBodyBeforeRetry func([]byte) ([]byte, error)
-
-	if configType == "managed-environments" {
-		retryPolicy = func(response Response) bool {
-			return response.StatusCode >= 400 && response.StatusCode < 500
-		}
-		modifyBodyBeforeRetry = removeLogStorageSettingsFromEnvironmentDto
-	}
-
 	if existingObjectId != "" {
 		if theApi.IsSingleResource() {
 			path = fullUrl
@@ -79,7 +67,10 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 			tmp := strings.Replace(string(payload), "{", "{\n\"groupId\":\""+existingObjectId+"\",\n", 1)
 			body = []byte(tmp)
 		} else if configType == "managed-environments" {
-			path = joinUrl(fullUrl, existingObjectId)
+			var err error
+			if body, err = sanitizeEnvironment(payload); err != nil {
+				return dtEntity, err
+			}
 		}
 
 		// Updating a dashboard requires the ID to be contained in the JSON, so we just add it...
@@ -92,16 +83,6 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 
 		if err != nil {
 			return api.DynatraceEntity{}, err
-		}
-
-		if retryPolicy(resp) {
-			if modifyBodyBeforeRetry != nil {
-				util.Log.Info("%d when modifying %s(%s) - will try to modify body and retry", resp.StatusCode, configType, objectName)
-				body, resp, err = modifyBodyAndRetryCall(put, client, path, body, modifyBodyBeforeRetry, apiToken)
-				if err != nil {
-					return api.DynatraceEntity{}, err
-				}
-			}
 		}
 
 	} else {
@@ -120,21 +101,10 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 				util.Log.Info("SMTP password is set to 'null', skipping...")
 				return dtEntity, err
 			}
-		}
-
-		resp, err = post(client, path, body, apiToken)
-		if err != nil {
-			return api.DynatraceEntity{}, err
-		}
-
-		if retryPolicy(resp) {
-			if modifyBodyBeforeRetry != nil {
-				util.Log.Info("%d when modifying %s(%s) - will try to modify body and retry", resp.StatusCode, configType, objectName)
-				body, resp, err = modifyBodyAndRetryCall(post, client, path, body, modifyBodyBeforeRetry, apiToken)
-
-				if err != nil {
-					return api.DynatraceEntity{}, err
-				}
+		} else if configType == "managed-environments" {
+			var err error
+			if body, err = sanitizeEnvironment(payload); err != nil {
+				return dtEntity, err
 			}
 		} else if theApi.GetId() == "managed-certificates" {
 			var jsonResp api.SslCertificateConfig
