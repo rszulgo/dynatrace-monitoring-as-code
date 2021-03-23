@@ -160,11 +160,7 @@ func upsertDynatraceObject(client *http.Client, fullUrl string, objectName strin
 			resp, err = put(client, path, body, apiToken)
 		}
 
-		if configType != "managed-management-zones" {
-			resp, err = post(client, path, body, apiToken)
-		}
-
-		if !skipUpload {
+		if configType != "managed-management-zones" && !skipUpload {
 			resp, err = post(client, path, body, apiToken)
 		}
 
