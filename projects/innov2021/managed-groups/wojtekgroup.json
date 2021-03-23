@@ -11,7 +11,7 @@
    "65ca87ab-62eb-41ef-9939-d523a3b20cae"
   ]
  },
- "isClusterAdminGroup": true,
+ "isClusterAdminGroup": false,
  "ldapGroupNames": [],
  "manageAccount": true,
  "name": "{{.name}}",
