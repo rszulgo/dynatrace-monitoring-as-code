@@ -4,6 +4,7 @@ config:
 - test1: test1.json
 - missioncontrolgroup: missioncontrolgroup.json
 - wojtekgroup: wojtekgroup.json
+- sample: sample.json
 test1:
 - name: test1
 test2:
@@ -14,3 +15,5 @@ missioncontrolgroup:
 - name: missioncontrolgroup
 wojtekgroup:
 - name: wojtekgroup
+sample:
+- name: sample

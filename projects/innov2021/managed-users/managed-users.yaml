@@ -3,6 +3,7 @@ config:
 - admin: admin.json
 - marek: marek.json
 - wojtek: wojtek.json
+- dummy: dummy.json
 admin:
 - name: admin
 test1123123:
@@ -11,3 +12,5 @@ marek:
 - name: marek
 wojtek:
 - name: wojtek
+dummy:
+- name: dummy

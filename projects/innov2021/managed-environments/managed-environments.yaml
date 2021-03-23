@@ -7,6 +7,7 @@ config:
 - qa: qa.json
 - szosty: szosty.json
 - trzeci: trzeci.json
+- testenvironment: testenvironment.json
 czwarty:
 - name: czwarty
 exampleenvironment:
@@ -23,3 +24,5 @@ szosty:
 - name: szosty
 trzeci:
 - name: trzeci
+testenvironment:
+- name: testenvironment
